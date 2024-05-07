@@ -82,3 +82,62 @@ LEFT JOIN aviones ON vuelos.id_avion = aviones.patente
 LEFT JOIN paises as orig ON vuelos.id_origen = orig.id_pais 
 LEFT JOIN paises as dest ON vuelos.id_destino = dest.id_pais 
 ORDER BY litros_consumidos DESC ;
+
+
+-- Ejercicio 10
+-- Crear función que permita hacer el check-in (ver punto 3).
+-- La misma debe poder invocarse y sin devolver nada como resultado, ésta debe actualizar el campo checked_in del ticket correspondiente.
+-- Debe tomar el dni y el cod_vuelo como parámetros de entrada.
+-- Luego, hacer validación para que, si el pasajero de ese vuelo ya tiene realizado el check-in,
+-- no vuelva a sobrescribir el campo, sino que levante una excepción (raise exception).
+
+CREATE OR REPLACE FUNCTION public.check_in2(dni_pasajero integer, vuelo_ps character varying)
+ RETURNS integer
+ LANGUAGE plpgsql
+AS $function$
+DECLARE state boolean;
+BEGIN
+state := (SELECT checked_in FROM tickets  where dni_pasajero = pasajero AND vuelo_ps = vuelo limit 1);
+if state = false THEN
+    UPDATE tickets set checked_in = true 
+    where dni_pasajero = pasajero AND vuelo_ps = vuelo AND checked_in <> true;
+    return 0;
+    ELSE
+    RAISE EXCEPTION 'Ya esta hecho el check in';
+    END if;
+END;
+$function$
+
+
+SELECT check_in2(344696634,'CBG555');
+select pasajero,vuelo, checked_in from tickets WHERE pasajero = 344696634;
+
+
+-- Ejercicio 11
+-- Crear una función "setAsiento" que asigne el asiento al pasajero. 
+-- Debe recibir el código de vuelo, el DNI y el numero de asiento a asignar. 
+-- A su vez, la función debe validar que en ese vuelo no esté ocupado el asiento que se desea asignar. 
+-- En caso de que se elija un asiento ocupado, levantar una excepción. 
+-- En caso de que el asiento esté disponible, actualizar el campo asiento.
+
+CREATE FUNCTION setAsiento(dni_pasajero INTEGER, cod_vuelo varchar(10), n_asiento integer) 
+RETURNS int AS $$
+DECLARE _asiento integer;
+BEGIN
+_asiento := (SELECT asiento FROM tickets  where cod_vuelo = vuelo AND asiento = n_asiento limit 1);
+if _asiento  IS NULL THEN
+    update tickets set asiento = n_asiento where dni_pasajero = pasajero AND cod_vuelo = vuelo;
+    return 0;
+ELSE 
+    RAISE EXCEPTION 'Asiento tomado';
+    return 1;
+END if;
+    
+END;
+$$ LANGUAGE plpgsql;
+
+
+SELECT setasiento(344696634,'CBG555',23);
+select pasajero,vuelo, checked_in,asiento from tickets WHERE pasajero = 344696634;
+
+select pasajero,vuelo, checked_in,asiento from tickets WHERE asiento = 23;
