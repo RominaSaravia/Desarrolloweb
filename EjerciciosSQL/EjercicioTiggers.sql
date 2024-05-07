@@ -1,4 +1,5 @@
 -- Ejercicio en clase
+-- Verificar si el producto que quiero vender tiene stock > 0. Si tiene, restar uno del stock de ese producto, y si no tiene, levantar excepción.
 CREATE OR REPLACE FUNCTION trigger_factura_stock() 
 RETURNS trigger as $$
 BEGIN
