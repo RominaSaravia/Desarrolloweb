@@ -13,13 +13,14 @@ CREATE TABLE animales(
     id_animal SERIAL,
     nombre VARCHAR(30),
     edad INTEGER,
-    especie VARCHAR(50),
+    especie INTEGER,
     raza VARCHAR(50),
     peso NUMERIC(11,2),
     cuidador INTEGER,
     genero CHAR,
     PRIMARY KEY (id_animal),
-    Foreign Key (cuidador) REFERENCES cuidadores(id_cuidador)
+    Foreign Key (cuidador) REFERENCES cuidadores(id_cuidador),
+    Foreign Key (especie) REFERENCES especies(id_especie)
 );
 
 CREATE TABLE fichas_medicas(
@@ -37,9 +38,10 @@ CREATE TABLE vacunas(
     N_total_dosis INTEGER,
     Tratamiento VARCHAR(200),
     Duracion_meses INTEGER,
-    Especie VARCHAR(50),
+    Especie INTEGER,
     Coste NUMERIC(11,2),
-    PRIMARY KEY (id_vacuna)
+    PRIMARY KEY (id_vacuna),
+    Foreign Key (Especie) REFERENCES especies(id_especie)
 );
 
 
@@ -63,6 +65,13 @@ create Table visitas(
     PRIMARY KEY (id_visita),
     Foreign Key (ficha_medica) REFERENCES fichas_medicas(id_ficha_medica)
 );
+
+create table especies (
+    id_especie SERIAL,
+    nombre varchar(40),
+    PRIMARY KEY (id_especie)
+);
+
 
 
 ------------------------CREACION_NUEVA_FICHA_VACUNA---------------------------------
