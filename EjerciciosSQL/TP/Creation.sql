@@ -74,7 +74,8 @@ create table especies (
 
 
 
-------------------------CREACION_NUEVA_FICHA_VACUNA---------------------------------
+------------------------CREACION_NEW_FICHA_MEDICA---------------------------------
+-- Se creará nueva ficha médica cuando un nuevo animal ingrese a la base de datos.
 CREATE OR REPLACE FUNCTION trigger_new_animal() 
 RETURNS trigger
 AS $$
@@ -95,7 +96,8 @@ EXECUTE FUNCTION trigger_new_animal();
 
 
 ------------------------CREACION_NUEVA_FICHA_VACUNA---------------------------------
-
+-- Cuando una vacuna es aplicada, una nuevo record de ficha_vacuna es creado esto resulta en:
+-- un nuevo record de visita creado, la columna costo tendrá el valor del costo de la vacuna.
 CREATE OR REPLACE FUNCTION trigger_new_ficha_vacuna() 
 RETURNS trigger AS $$
 DECLARE nombre_vacuna VARCHAR(200);
@@ -117,6 +119,8 @@ EXECUTE FUNCTION trigger_new_ficha_vacuna();
 
 
 ---------------------VALIDACION_NUEVA_VACUNA----------------------------
+-- Antes de crear una nueva ficha_vacuna, valida si hubo una aplicacion de la misma vacuna anteriormente
+-- Si el día de aplicacion es mayor a la duracion de la vacuna, pasa la validacion
 CREATE OR REPLACE FUNCTION trigger_new_ficha_vacuna_val() 
 RETURNS trigger AS $$
 DECLARE nInterval integer;
