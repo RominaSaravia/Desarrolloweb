@@ -1,7 +1,7 @@
 -- Active: 1714513579081@@dpg-co7iljkf7o1s738hnqc0-a.oregon-postgres.render.com@5432@trabajobasededatos@public
 insert into vacunas ( nombre ,N_total_dosis ,Tratamiento,Duracion_meses,Especie,Coste) 
 values 
-('Vacuna bivalente',1,'Moquillo y Parvovirus',99,1, 3500),
+('Vacuna bivalente',1,'Moquillo y Parvovirus',0,1, 3500),
 ('Vacuna polivalente',3,'Moquillo canino,Parvovirus,Hepatitis Infecciona C, Leptospitosis,Parainfluenza',12,1,5000),
 ('Vacuna AntiRabica',1,'Antirabica',12,1,4500),
 ('Vacuna trivalente',3,'Panleucopenia,rinotraqueitis,calicivirus felino',12,2,3500),
@@ -9,8 +9,8 @@ values
 ('Vacuna AntiRabica',1,'Rabia felina',12,2,4500),
 ('vacuna de la mixomatosis',1,'Mixomatosis',12,4,5500),
 ('Vacuna de la fiebre hemorrágica',1,'Hemorragia vírica',12,4,5500),
-('Vacuna Gumboro',1,'Bursitis infecciosa',99,3,6000),
-('Vacuna contra la Viruela Aviar',1,'Viruela aviar',99,3,6000)
+('Vacuna Gumboro',1,'Bursitis infecciosa',0,3,6000),
+('Vacuna contra la Viruela Aviar',1,'Viruela aviar',0,3,6000)
 ;
 
 insert into especies (nombre)
@@ -53,7 +53,7 @@ insert into animales (nombre,edad,especie,raza,peso,cuidador,genero)
 values
 ('Odin',9,1,'Malamute de Alaska',21.2, 1,'M'),
 ('Loki',8,1,'Husky siberiano',16.2, 1,'M'),
-('Loki',8,1,'Husky siberiano',18.2, 1,'M'),
+('Thory',8,1,'Husky siberiano',18.2, 1,'M'),
 ('Chipi',3,4,'Conejo Polaco',1.5, 2,'H'),
 ('Ariel',3,4,'Conejo Polaco',1.2, 2,'H'),
 ('Toto',4,4,'Conejo Polaco',2.2, 2,'M'),

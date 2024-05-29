@@ -130,11 +130,11 @@ BEGIN
     last_application := (SELECT fecha_aplicacion from fichas_vacunas Where vacuna = NEW.vacuna AND ficha_medica = NEW.ficha_medica ORDER BY fecha_aplicacion DESC LIMIT 1);
     nInterval := (SELECT duracion_meses from vacunas Where id_vacuna = NEW.vacuna  LIMIT 1);
     timeFlag = last_application + nInterval *  INTERVAL '1 MONTH';
-    if (   (timeFlag   < NEW.fecha_aplicacion AND nInterval <> 99 ) OR last_application IS NULL) 
+    if ( (timeFlag < NEW.fecha_aplicacion AND nInterval <> 0 ) OR last_application IS NULL) 
     THEN
     return NEW;
     END IF;
-    if(nInterval <> 99) THEN
+    if(nInterval <> 0) THEN
     RAISE EXCEPTION '--> Última aplicación fue en: %  proxima fecha para la vacuna: %', to_char(last_application, 'YYYY-MM-DD') , to_char(timeFlag, 'YYYY-MM-DD') ;
     END IF;
     RAISE EXCEPTION 'Esta vacuna ya fue aplicada el %', last_application;
@@ -156,9 +156,42 @@ insert into fichas_vacunas (ficha_medica,vacuna,fecha_aplicacion)
 values (1,5, current_timestamp + INTERVAL '12 MONTH');
 
 insert into fichas_vacunas (ficha_medica,vacuna,fecha_aplicacion)
-values (1,5, current_timestamp);
+values (3,5, current_timestamp);
 
 insert into fichas_vacunas (ficha_medica,vacuna,fecha_aplicacion)
-values (2,1, current_timestamp);
+values (3,1, current_timestamp);
 
+
+---------VALIDACION_APLICACION_DE_VACUNA_SEGUN_ESPECIE ------------------
+CREATE OR REPLACE FUNCTION trigger_new_ficha_vacuna_especie_val() 
+RETURNS trigger AS $$
+DECLARE especie_animal INTEGER;
+DECLARE especie_vacuna INTEGER;
+BEGIN
+    especie_animal := (SELECT animales.especie  from fichas_medicas  
+    LEFT JOIN animales ON fichas_medicas.animal = animales.id_animal
+    Where  id_ficha_medica = NEW.ficha_medica LIMIT 1);
+    especie_vacuna := (SELECT especie from vacunas Where id_vacuna = NEW.vacuna  LIMIT 1);
+
+    if ( especie_animal = especie_vacuna  ) 
+    THEN
+    return NEW;
+    END IF;
+    RAISE EXCEPTION '-- No coincide la especie del animal con la vacuna' ;
+    return NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE TRIGGER trigger_ficha_vacuna_especie_val
+BEFORE INSERT
+ON fichas_vacunas
+FOR EACH ROW
+EXECUTE FUNCTION trigger_new_ficha_vacuna_especie_val();
+
+
+
+-----TEST_TIGGER_trigger_new_ficha_vacuna_especie_val
+
+insert into fichas_vacunas (ficha_medica,vacuna,fecha_aplicacion)
+values (9,5, current_timestamp);
 
