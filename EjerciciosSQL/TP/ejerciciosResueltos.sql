@@ -61,3 +61,13 @@ ORDER BY animal DESC
 ;
 
 
+--6) Obtener el total de facturación por cada especie de animal incluyendo las vacunaciones,
+-- ordenado de mayor a menor.
+###
+SELECT vacunas.especie,SUM(costo_visita) from visitas
+LEFT JOIN fichas_medicas ON visitas.ficha_medica = fichas_medicas.id_ficha_medica
+LEFT JOIN fichas_vacunas ON visitas.ficha_medica = fichas_vacunas.ficha_medica
+LEFT JOIN vacunas ON fichas_vacunas.vacuna = vacunas.id_vacuna
+GROUP BY vacunas.especie,costo_visita
+
+
