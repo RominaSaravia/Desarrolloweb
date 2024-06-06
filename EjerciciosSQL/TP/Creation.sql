@@ -8,6 +8,12 @@ CREATE TABLE cuidadores(
     PRIMARY KEY (id_cuidador)
 )
 
+create table especies (
+    id_especie SERIAL,
+    nombre varchar(40),
+    PRIMARY KEY (id_especie)
+);
+
 
 CREATE TABLE animales(
     id_animal SERIAL,
@@ -66,11 +72,6 @@ create Table visitas(
     Foreign Key (ficha_medica) REFERENCES fichas_medicas(id_ficha_medica)
 );
 
-create table especies (
-    id_especie SERIAL,
-    nombre varchar(40),
-    PRIMARY KEY (id_especie)
-);
 
 
 
