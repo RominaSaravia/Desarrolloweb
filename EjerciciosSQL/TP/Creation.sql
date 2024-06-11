@@ -154,10 +154,7 @@ EXECUTE FUNCTION trigger_new_ficha_vacuna_val();
 
 ----TEST_VALIDACION_NUEVA_FICHA_VACUNA-------
 insert into fichas_vacunas (ficha_medica,vacuna,fecha_aplicacion)
-values (1,5, current_timestamp + INTERVAL '12 MONTH');
-
-insert into fichas_vacunas (ficha_medica,vacuna,fecha_aplicacion)
-values (3,5, current_timestamp);
+values (1,3, current_timestamp);
 
 insert into fichas_vacunas (ficha_medica,vacuna,fecha_aplicacion)
 values (3,1, current_timestamp);

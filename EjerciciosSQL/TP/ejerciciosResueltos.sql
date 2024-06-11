@@ -125,18 +125,12 @@ ORDER BY animales.especie DESC
 
 --9  Crear vista
 -- Cuantos animales tiene cada cuidador segun especie
--- Nombre y telefono de contacto del cuidador
+-- Con el Nombre y telefono de contacto del cuidador
 CREATE or REPLACE VIEW "Cuidadores_N_Animales" AS SELECT id_cuidador,cuidadores.nombre AS "Cuidador",cuidadores.telefono,especies.nombre AS "Especie",COUNT(id_animal) AS "N_animales" from animales
 LEFT JOIN cuidadores ON animales.cuidador = cuidadores.id_cuidador
 LEFT JOIN especies ON animales.especie = especies.id_especie
 GROUP BY id_cuidador, especies.nombre
 Order by id_cuidador DESC;
-
---Porcentaje segun el total de animales en la base de datos por cada especie
-SELECT especie,COUNT(id_animal) AS "N_animales",  (COUNT(id_animal) * 100) / (SELECT COUNT(id_animal) from animales)   || '%' AS "Porcentaje_animales"
-from animales
-LEFT JOIN cuidadores ON animales.cuidador = cuidadores.id_cuidador
-GROUP BY especie;
 
 
 --10 Crear vista con los animales que necesitan vacunarse, con los datos de contacto del cuidador, 
