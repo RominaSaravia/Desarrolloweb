@@ -1,9 +1,19 @@
 ## Generales
-## 1 ---
+-- 1) Obtener listado de todos los animales ordenados por edad de mayor a menor. Mostrar los siguientes datos:
+--    - Nombre en mayúsculas
+--    - Especie
+--    - Raza
+--    - Genero
+--    - Edad
 SELECT nombre,especie,raza,genero,edad from animales ORDER BY  edad DESC;
 
 
-## 2 ----
+-- 2) Obtener ficha médica de todos los animales ordenados por última visita realizada (la más reciente más arriba).
+-- Mostrar los siguientes datos:
+--    - ID del animal
+--    - Nombre del animal
+--    - Fecha de última visita realizada
+--    - Historial médico
 SELECT animal,animales.nombre, visitas.fecha, historial_medico 
 from fichas_medicas
 LEFT JOIN animales ON fichas_medicas.animal = animales.id_animal
@@ -113,4 +123,30 @@ GROUP BY animales.especie, animales.edad
 ORDER BY animales.especie DESC
 ;
 
+--9  Crear vista
+-- Cuantos animales tiene cada cuidador segun especie
+-- Nombre y telefono de contacto del cuidador
+CREATE or REPLACE VIEW "Cuidadores_N_Animales" AS SELECT id_cuidador,cuidadores.nombre AS "Cuidador",cuidadores.telefono,especies.nombre AS "Especie",COUNT(id_animal) AS "N_animales" from animales
+LEFT JOIN cuidadores ON animales.cuidador = cuidadores.id_cuidador
+LEFT JOIN especies ON animales.especie = especies.id_especie
+GROUP BY id_cuidador, especies.nombre
+Order by id_cuidador DESC;
+
+--Porcentaje segun el total de animales en la base de datos por cada especie
+SELECT especie,COUNT(id_animal) AS "N_animales",  (COUNT(id_animal) * 100) / (SELECT COUNT(id_animal) from animales)   || '%' AS "Porcentaje_animales"
+from animales
+LEFT JOIN cuidadores ON animales.cuidador = cuidadores.id_cuidador
+GROUP BY especie;
+
+
+--10 Crear vista con los animales que necesitan vacunarse, con los datos de contacto del cuidador, 
+-- ordenar por especie ASC
+CREATE or REPLACE VIEW "Reminder_vacunacion" AS SELECT ficha_medica,fichas_medicas.animal AS "ID_Animal",animales.especie,animales.nombre AS "Nombre_Animal",vacunas.nombre AS "vacuna",fecha_aplicacion, cuidadores.nombre AS "Cuidador_nombre", cuidadores.email, cuidadores.telefono
+from fichas_vacunas
+LEFT JOIN fichas_medicas ON fichas_vacunas.ficha_medica = fichas_medicas.id_ficha_medica
+LEFT JOIN vacunas ON fichas_vacunas.vacuna = vacunas.id_vacuna
+LEFT JOIN animales ON fichas_medicas.animal = animales.id_animal
+LEFT JOIN cuidadores ON animales.cuidador = cuidadores.id_cuidador
+WHERE (fecha_aplicacion + vacunas.duracion_meses * INTERVAL '1 MONTH' < current_timestamp AND duracion_meses <> 0)
+ORDER BY animales.especie;
 

@@ -136,7 +136,13 @@ values
 ('Nini',4,2,'Gato esfinge',3.0, 33,'H'),
 ('Rocco',3,1,'Mestizo',12.2, 34,'M'),
 ('Ciro',7,1,'Mestizo',9.2, 35,'M'),
-('Nalo',5,1,'Mestizo',6.2, 35,'M')
+('Nalo',5,1,'Mestizo',6.2, 35,'M'),
+('my',3,2,'Gato persa',3.1, 1,'M'),
+('Momo',3,2,'Gato esfinge',3.8, 3,'H'),
+('Nelson',4,2,'Gato esfinge',3.0, 7,'H'),
+('Pipo',3,1,'Mestizo',12.2, 14,'M'),
+('Luna',3,2,'Siamés',2.5, 22,'H'),
+('Roro',3,2,'Siamés',2.8, 16,'M')
 ;
 
 
